@@ -469,23 +469,36 @@
       gap: 8px;
     }
 
-    /* Mobile video container — portrait 9:16 */
+    /* Video — landscape web view (16:9) */
     .portfolio-video-wrap {
       width: 100%;
+      aspect-ratio: 16 / 9;
       background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
-      max-height: 480px;
     }
 
     .portfolio-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Video — mobile portrait (9:16), centred with padding */
+    .portfolio-video-wrap.portrait {
+      aspect-ratio: unset;
+      height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--border);
+    }
+
+    .portfolio-video-wrap.portrait .portfolio-video {
       width: auto;
-      height: 480px;
+      height: 100%;
       max-width: 100%;
       object-fit: contain;
-      display: block;
     }
 
     .portfolio-body { padding: 28px; }
@@ -832,7 +845,7 @@
 
         <!-- Project 1 -->
         <div class="portfolio-card reveal reveal-delay-1">
-          <div class="portfolio-video-wrap">
+          <div class="portfolio-video-wrap portrait">
             <video class="portfolio-video" autoplay muted loop playsinline
                    onerror="this.parentElement.style.display='none';document.getElementById('p1-placeholder').style.display='flex'">
               <source src="project1.mov" type="video/quicktime" />
@@ -861,10 +874,15 @@
 
         <!-- Project 2 -->
         <div class="portfolio-card reveal reveal-delay-2">
-          <img class="portfolio-img" src="project2.jpg" alt="Analytics MVP"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-          <div class="portfolio-img-placeholder" style="display:none">
-            📷 Add project2.jpg to your folder
+          <div class="portfolio-video-wrap">
+            <video class="portfolio-video" autoplay muted loop playsinline
+                   onerror="this.parentElement.style.display='none';document.getElementById('p2-placeholder').style.display='flex'">
+              <source src="project2.mov" type="video/quicktime" />
+              <source src="project2.mov" type="video/mp4" />
+            </video>
+          </div>
+          <div class="portfolio-img-placeholder" id="p2-placeholder" style="display:none">
+            🎬 Add project2.mov to your folder
           </div>
           <div class="portfolio-body">
             <div class="portfolio-meta">
