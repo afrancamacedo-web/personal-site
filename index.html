@@ -3,32 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Name</title>
+  <title>Alana França — Senior Product Manager</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f7f7f5;
+      --bg: #fafaf8;
       --surface: #ffffff;
-      --border: #e4e4e0;
-      --text: #1a1a1a;
+      --border: #e8e8e4;
+      --text: #111111;
       --muted: #888;
       --accent: #5b4ef8;
-      --card-hover-bg: #f0f0ee;
-      --card-hover-border: #ccc;
-      --radius: 12px;
+      --accent2: #c084fc;
+      --accent-bg: rgba(91,78,248,0.07);
+      --radius: 16px;
+      --nav-h: 60px;
     }
 
     [data-theme="dark"] {
-      --bg: #0f0f0f;
-      --surface: #1a1a1a;
-      --border: #2a2a2a;
-      --text: #e8e8e8;
-      --muted: #777;
+      --bg: #0c0c0c;
+      --surface: #161616;
+      --border: #272727;
+      --text: #f0f0f0;
+      --muted: #666;
       --accent: #7c6aff;
-      --card-hover-bg: #1f1f1f;
-      --card-hover-border: #444;
+      --accent2: #c084fc;
+      --accent-bg: rgba(124,106,255,0.1);
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
@@ -36,26 +39,50 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       font-size: 15px;
       line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 60px 20px;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
     }
 
-    main {
-      width: 100%;
-      max-width: 560px;
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
       display: flex;
-      flex-direction: column;
-      gap: 48px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      transition: background 0.3s;
     }
 
-    /* Theme toggle */
-    .topbar {
-      display: flex;
-      justify-content: flex-end;
+    .nav-logo {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
 
     .theme-toggle {
       background: var(--surface);
@@ -66,260 +93,640 @@
       font-family: inherit;
       font-size: 13px;
       padding: 5px 14px;
-      transition: color 0.15s, border-color 0.15s, background 0.2s;
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: color 0.15s, border-color 0.15s, background 0.3s;
     }
 
-    .theme-toggle:hover { color: var(--text); border-color: var(--card-hover-border); }
+    .theme-toggle:hover { color: var(--text); border-color: #aaa; }
 
-    /* Hero */
-    .hero {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-    }
-
-    .avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), #c084fc);
+    /* ── Sections shared ── */
+    .section {
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
-      font-weight: 700;
-      color: #fff;
-      flex-shrink: 0;
+      padding: calc(var(--nav-h) + 60px) 24px 80px;
+    }
+
+    .section-inner {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* ── Fade-in animation ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ── Hero ── */
+    #hero {
+      background: var(--bg);
+      position: relative;
       overflow: hidden;
     }
 
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    /* Animated blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(60px);
     }
 
-    .hero h1 {
-      font-size: 26px;
+    .blob-1 {
+      width: 560px;
+      height: 560px;
+      background: radial-gradient(circle, rgba(91,78,248,0.18) 0%, transparent 70%);
+      top: -120px;
+      right: -160px;
+      animation: blobFloat1 9s ease-in-out infinite;
+    }
+
+    .blob-2 {
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(192,132,252,0.15) 0%, transparent 70%);
+      bottom: -80px;
+      left: -120px;
+      animation: blobFloat2 11s ease-in-out infinite;
+    }
+
+    .blob-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(96,165,250,0.1) 0%, transparent 70%);
+      top: 40%;
+      left: 30%;
+      animation: blobFloat3 13s ease-in-out infinite;
+    }
+
+    @keyframes blobFloat1 {
+      0%,100% { transform: translate(0, 0) scale(1); }
+      33%      { transform: translate(-40px, 30px) scale(1.08); }
+      66%      { transform: translate(30px, -20px) scale(0.94); }
+    }
+
+    @keyframes blobFloat2 {
+      0%,100% { transform: translate(0, 0) scale(1); }
+      33%      { transform: translate(50px, -40px) scale(1.1); }
+      66%      { transform: translate(-30px, 30px) scale(0.92); }
+    }
+
+    @keyframes blobFloat3 {
+      0%,100% { transform: translate(0, 0) scale(1); }
+      50%      { transform: translate(-60px, 40px) scale(1.15); }
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .hero-eyebrow {
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: -0.5px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--accent);
     }
 
-    .hero p {
+    .hero-title {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-bio {
+      font-size: 16px;
       color: var(--muted);
-      max-width: 420px;
+      line-height: 1.75;
+      max-width: 540px;
     }
 
-    .socials {
+    .hero-ctas {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
     }
 
-    .social-link {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 13px;
-      border: 1px solid var(--border);
-      padding: 4px 12px;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 22px;
       border-radius: 99px;
-      transition: color 0.15s, border-color 0.15s;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.15s, transform 0.15s;
     }
 
-    .social-link:hover { color: var(--text); border-color: var(--card-hover-border); }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
 
-    /* Section */
-    section { display: flex; flex-direction: column; gap: 16px; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+    }
 
-    .section-label {
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      padding-top: 8px;
+    }
+
+    .stat { display: flex; flex-direction: column; gap: 2px; }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label { font-size: 12px; color: var(--muted); }
+
+    /* ── Section label ── */
+    .label {
       font-size: 11px;
       font-weight: 600;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.4px;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--accent);
+      margin-bottom: 12px;
     }
 
-    /* Projects */
-    .projects { display: flex; flex-direction: column; gap: 10px; }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 40px;
+      line-height: 1.2;
+    }
 
-    .project-card {
+    /* ── Experience ── */
+    #experience { background: var(--surface); }
+
+    .exp-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .exp-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .exp-card:hover {
+      border-color: var(--accent);
+      transform: translateX(4px);
+      box-shadow: 0 4px 24px rgba(91,78,248,0.08);
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .exp-role { font-weight: 600; font-size: 16px; }
+    .exp-company { font-size: 14px; color: var(--accent); margin-top: 2px; font-weight: 500; }
+    .exp-date { font-size: 12px; color: var(--muted); white-space: nowrap; flex-shrink: 0; margin-top: 4px; }
+
+    .exp-bullets {
+      margin-top: 16px;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      display: none;
+    }
+
+    .exp-bullets li { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .exp-card.open .exp-bullets { display: flex; }
+
+    .exp-toggle {
+      font-size: 12px;
+      color: var(--accent);
+      margin-top: 12px;
+      display: inline-block;
+    }
+
+    /* ── Skills ── */
+    #skills { background: var(--bg); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+      text-align: center;
+    }
+
+    .skill-card:hover {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+      transform: translateY(-2px);
+    }
+
+    /* ── Education ── */
+    #education { background: var(--surface); }
+
+    .edu-cards { display: flex; flex-direction: column; gap: 12px; }
+
+    .edu-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 26px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .edu-card:hover { border-color: var(--accent); }
+
+    .edu-degree { font-weight: 600; font-size: 15px; }
+    .edu-school { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .edu-year { font-size: 12px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+
+    /* ── Contact ── */
+    #contact { background: var(--bg); }
+
+    .contact-wrapper {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      text-decoration: none;
-      color: var(--text);
-      transition: border-color 0.15s, background 0.15s;
-      gap: 12px;
+      border-radius: 24px;
+      padding: 40px;
     }
 
-    .project-card:hover { border-color: var(--card-hover-border); background: var(--card-hover-bg); }
-
-    .project-info { display: flex; flex-direction: column; gap: 3px; }
-
-    .project-name { font-weight: 500; font-size: 14px; }
-
-    .project-desc { font-size: 13px; color: var(--muted); }
-
-    .project-tag {
-      font-size: 11px;
-      color: var(--accent);
-      background: rgba(124, 106, 255, 0.12);
-      padding: 3px 10px;
-      border-radius: 99px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    /* Contact form */
-    form { display: flex; flex-direction: column; gap: 12px; }
+    form { display: flex; flex-direction: column; gap: 14px; }
 
     .field { display: flex; flex-direction: column; gap: 6px; }
 
     label { font-size: 13px; color: var(--muted); }
 
     input, textarea {
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 10px;
       color: var(--text);
       font-family: inherit;
       font-size: 14px;
-      padding: 10px 14px;
+      padding: 11px 16px;
       outline: none;
-      transition: border-color 0.15s, background 0.2s;
+      transition: border-color 0.15s, background 0.3s;
       resize: vertical;
     }
 
     input:focus, textarea:focus { border-color: var(--accent); }
 
-    textarea { min-height: 100px; }
+    textarea { min-height: 110px; }
 
-    button[type="submit"] {
-      align-self: flex-start;
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 24px;
-      transition: opacity 0.15s;
-    }
-
-    button[type="submit"]:hover { opacity: 0.85; }
-
-    .form-status {
-      font-size: 13px;
-      color: var(--muted);
-      min-height: 18px;
-    }
-
+    .form-status { font-size: 13px; color: var(--muted); min-height: 20px; }
     .form-status.success { color: #4ade80; }
 
-    /* Footer */
+    /* ── Footer ── */
     footer {
+      text-align: center;
+      padding: 32px;
       font-size: 12px;
       color: var(--muted);
-      padding-bottom: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Scroll indicator ── */
+    .scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-hint svg { width: 16px; height: 16px; stroke: var(--muted); }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .contact-wrapper { padding: 24px; }
+      .stats-row { gap: 20px; }
     }
   </style>
 </head>
 <body>
-  <main>
 
-    <!-- Topbar -->
-    <div class="topbar">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
-        <span id="theme-icon">☽</span>
-        <span id="theme-label">Dark</span>
-      </button>
-    </div>
+  <!-- Nav -->
+  <nav>
+    <span class="nav-logo">AF</span>
+    <ul class="nav-links">
+      <li><a href="#hero">Home</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+      <span id="theme-icon">☽</span>
+      <span id="theme-label">Dark</span>
+    </button>
+  </nav>
 
-    <!-- Hero -->
-    <div class="hero">
-      <div class="avatar">
-        <!-- Replace the initials below with an <img> tag if you have a photo -->
-        YN
+  <!-- Hero -->
+  <section class="section" id="hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="section-inner hero-inner">
+      <div class="avatar reveal">AF</div>
+      <div class="reveal reveal-delay-1">
+        <div class="hero-eyebrow">Senior Product Manager</div>
       </div>
-      <div>
-        <h1>Your Name</h1>
+      <div class="reveal reveal-delay-2">
+        <h1 class="hero-title">Alana<br><span>França</span></h1>
       </div>
-      <p>
-        Designer &amp; developer building thoughtful digital products.
-        Interested in interfaces, systems, and the space between them.
+      <p class="hero-bio reveal reveal-delay-3">
+        8+ years building B2B SaaS and fintech platforms that drive engagement, operational efficiency, and revenue growth — bridging user needs, data, and commercial strategy.
       </p>
-      <div class="socials">
-        <a class="social-link" href="https://github.com" target="_blank" rel="noopener">GitHub</a>
-        <a class="social-link" href="https://twitter.com" target="_blank" rel="noopener">Twitter</a>
-        <a class="social-link" href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="social-link" href="/resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <div class="hero-ctas reveal reveal-delay-4">
+        <a class="btn btn-primary" href="https://www.linkedin.com/in/alana-franca/" target="_blank" rel="noopener">↗ LinkedIn</a>
+        <a class="btn btn-ghost" href="mailto:afrancamacedo@gmail.com?subject=Hello%20Alana&body=Hi%20Alana%2C%0A%0AI%20came%20across%20your%20profile%20and%20would%20love%20to%20connect.%0A%0ABest%20regards%2C">Email me</a>
+        <a class="btn btn-ghost" href="#contact">Get in touch</a>
+      </div>
+      <div class="stats-row reveal reveal-delay-5" id="stats-row">
+        <div class="stat">
+          <span class="stat-value" data-count="8" data-suffix="+">0</span>
+          <span class="stat-label">Years experience</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="50" data-suffix="%+">0</span>
+          <span class="stat-label">DAU growth</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="80" data-suffix="%">0</span>
+          <span class="stat-label">Efficiency gain</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="2" data-prefix="$" data-suffix="M+">0</span>
+          <span class="stat-label">Quarterly revenue</span>
+        </div>
+      </div>
+      <div class="scroll-hint reveal reveal-delay-5" style="margin-top:16px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        scroll
       </div>
     </div>
+  </section>
 
-    <!-- Projects -->
-    <section>
-      <span class="section-label">Projects</span>
-      <div class="projects">
-        <a class="project-card" href="https://github.com" target="_blank" rel="noopener">
-          <div class="project-info">
-            <span class="project-name">Project Alpha</span>
-            <span class="project-desc">A minimal task manager built with React and local storage.</span>
+  <!-- Experience -->
+  <section class="section" id="experience">
+    <div class="section-inner">
+      <p class="label reveal">Work</p>
+      <h2 class="section-title reveal">Experience</h2>
+      <div class="exp-list">
+
+        <div class="exp-card reveal reveal-delay-1">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Senior Product Manager</div>
+              <div class="exp-company">iConnections</div>
+            </div>
+            <div class="exp-date">Apr 2024 – Present · Remote</div>
           </div>
-          <span class="project-tag">React</span>
-        </a>
-        <a class="project-card" href="https://github.com" target="_blank" rel="noopener">
-          <div class="project-info">
-            <span class="project-name">Project Beta</span>
-            <span class="project-desc">CLI tool for automating repetitive file operations.</span>
+          <span class="exp-toggle">+ Show highlights</span>
+          <ul class="exp-bullets">
+            <li>Led launch of a new LP engagement tool, increasing DAU by 50%+ and unlocking a new revenue stream.</li>
+            <li>Improved internal team efficiency by 80% through CRM enhancements.</li>
+            <li>Owner of the 2026 Product Engagement Strategy across multiple squads.</li>
+            <li>Spearheaded analytics MVP launch, turning market validation into a revenue-enablement strategy.</li>
+            <li>Reduced feature delivery timelines by 30% via agile quarterly planning.</li>
+          </ul>
+        </div>
+
+        <div class="exp-card reveal reveal-delay-2">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Product Manager</div>
+              <div class="exp-company">Loft</div>
+            </div>
+            <div class="exp-date">Nov 2022 – May 2024 · São Paulo</div>
           </div>
-          <span class="project-tag">Python</span>
-        </a>
-        <a class="project-card" href="https://github.com" target="_blank" rel="noopener">
-          <div class="project-info">
-            <span class="project-name">Project Gamma</span>
-            <span class="project-desc">Design system with accessible components and dark mode.</span>
+          <span class="exp-toggle">+ Show highlights</span>
+          <ul class="exp-bullets">
+            <li>Led bottom-funnel platform squad for rental insurance, increasing lead activation by 20%.</li>
+            <li>Contributed to ~$2M quarterly revenue growth via process and platform optimization.</li>
+          </ul>
+        </div>
+
+        <div class="exp-card reveal reveal-delay-3">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">CX Strategy &amp; Operations</div>
+              <div class="exp-company">Loft</div>
+            </div>
+            <div class="exp-date">Sep 2021 – Nov 2022 · São Paulo</div>
           </div>
-          <span class="project-tag">CSS</span>
-        </a>
+          <span class="exp-toggle">+ Show highlights</span>
+          <ul class="exp-bullets">
+            <li>Designed MVP to centralize back-office requests from sales teams.</li>
+            <li>Launched new customer relationship journey and VoC data pipeline.</li>
+          </ul>
+        </div>
+
+        <div class="exp-card reveal reveal-delay-4">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Customer Success Lead</div>
+              <div class="exp-company">Loft</div>
+            </div>
+            <div class="exp-date">Oct 2020 – Sep 2021 · São Paulo</div>
+          </div>
+          <span class="exp-toggle">+ Show highlights</span>
+          <ul class="exp-bullets">
+            <li>Founded the CS team, implemented CRM workflows, and defined success metrics.</li>
+          </ul>
+        </div>
+
+        <div class="exp-card reveal reveal-delay-5">
+          <div class="exp-header">
+            <div>
+              <div class="exp-role">Co-founder &amp; Architect</div>
+              <div class="exp-company">ALLA Architecture and Design</div>
+            </div>
+            <div class="exp-date">Jun 2012 – Aug 2019 · Brazil</div>
+          </div>
+          <span class="exp-toggle">+ Show highlights</span>
+          <ul class="exp-bullets">
+            <li>Co-founded and led an architecture studio delivering commercial and residential projects.</li>
+            <li>Managed end-to-end project lifecycle from design through construction.</li>
+          </ul>
+        </div>
+
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Contact -->
-    <section>
-      <span class="section-label">Contact</span>
-      <form id="contact-form">
-        <div class="field">
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" placeholder="Jane Smith" required />
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="jane@example.com" required />
-        </div>
-        <div class="field">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" placeholder="Hello..." required></textarea>
-        </div>
-        <button type="submit">Send message</button>
-        <p class="form-status" id="form-status"></p>
-      </form>
-    </section>
+  <!-- Skills -->
+  <section class="section" id="skills">
+    <div class="section-inner">
+      <p class="label reveal">Expertise</p>
+      <h2 class="section-title reveal">Skills</h2>
+      <div class="skills-grid">
+        <div class="skill-card reveal reveal-delay-1">Product Management</div>
+        <div class="skill-card reveal reveal-delay-1">SaaS &amp; Fintech</div>
+        <div class="skill-card reveal reveal-delay-2">Agile / Scrum</div>
+        <div class="skill-card reveal reveal-delay-2">Data Strategy</div>
+        <div class="skill-card reveal reveal-delay-3">Stakeholder Mgmt</div>
+        <div class="skill-card reveal reveal-delay-3">Cross-functional Leadership</div>
+        <div class="skill-card reveal reveal-delay-4">Platform Growth</div>
+        <div class="skill-card reveal reveal-delay-4">User Retention</div>
+        <div class="skill-card reveal reveal-delay-5">Customer Success</div>
+        <div class="skill-card reveal reveal-delay-5">UX / UI</div>
+        <div class="skill-card reveal reveal-delay-1">Roadmap Planning</div>
+        <div class="skill-card reveal reveal-delay-2">Jira</div>
+        <div class="skill-card reveal reveal-delay-3">Salesforce</div>
+        <div class="skill-card reveal reveal-delay-4">Looker</div>
+        <div class="skill-card reveal reveal-delay-5">Miro</div>
+        <div class="skill-card reveal reveal-delay-1">AI / GenAI</div>
+      </div>
+    </div>
+  </section>
 
-    <footer>Built with plain HTML &amp; CSS &mdash; no frameworks.</footer>
-  </main>
+  <!-- Education -->
+  <section class="section" id="education">
+    <div class="section-inner">
+      <p class="label reveal">Background</p>
+      <h2 class="section-title reveal">Education</h2>
+      <div class="edu-cards">
+        <div class="edu-card reveal reveal-delay-1">
+          <div>
+            <div class="edu-degree">Bachelor of Architecture and Urbanism</div>
+            <div class="edu-school">Universidade de Fortaleza</div>
+          </div>
+          <div class="edu-year">2008 – 2014</div>
+        </div>
+        <div class="edu-card reveal reveal-delay-2">
+          <div>
+            <div class="edu-degree">Digital Product Leadership</div>
+            <div class="edu-school">Tera Treinamentos Profissionais</div>
+          </div>
+          <div class="edu-year">2022</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section" id="contact">
+    <div class="section-inner">
+      <p class="label reveal">Let's talk</p>
+      <h2 class="section-title reveal">Get in touch</h2>
+      <div class="contact-wrapper reveal reveal-delay-1">
+        <form id="contact-form">
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" placeholder="Jane Smith" required />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" placeholder="jane@example.com" required />
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Hello Alana..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="border-radius:10px;">Send message</button>
+          <p class="form-status" id="form-status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Alana França · São Paulo, Brazil · <a href="mailto:afrancamacedo@gmail.com" style="color:var(--accent);text-decoration:none;">afrancamacedo@gmail.com</a>
+  </footer>
 
   <script>
-    // Theme toggle
+    // ── Theme toggle ──
     const html = document.documentElement;
     const toggleBtn = document.getElementById('theme-toggle');
     const icon = document.getElementById('theme-icon');
@@ -335,16 +742,62 @@
     function setTheme(theme) {
       html.dataset.theme = theme;
       localStorage.setItem('theme', theme);
-      if (theme === 'dark') {
-        icon.textContent = '○';
-        label.textContent = 'Light';
-      } else {
-        icon.textContent = '☽';
-        label.textContent = 'Dark';
-      }
+      icon.textContent = theme === 'dark' ? '○' : '☽';
+      label.textContent = theme === 'dark' ? 'Light' : 'Dark';
     }
 
-    // Contact form
+    // ── Count-up ──
+    function countUp(el, target, duration = 1600) {
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const start = performance.now();
+      function tick(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = Math.round(eased * target);
+        el.textContent = prefix + value + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    let statsAnimated = false;
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !statsAnimated) {
+          statsAnimated = true;
+          document.querySelectorAll('.stat-value[data-count]').forEach((el, i) => {
+            setTimeout(() => countUp(el, +el.dataset.count), i * 120);
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const statsRow = document.getElementById('stats-row');
+    if (statsRow) statsObserver.observe(statsRow);
+
+    // ── Scroll reveal ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('visible');
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── Experience accordion ──
+    document.querySelectorAll('.exp-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const isOpen = card.classList.contains('open');
+        card.classList.toggle('open');
+        card.querySelector('.exp-toggle').textContent =
+          isOpen ? '+ Show highlights' : '− Hide highlights';
+      });
+    });
+
+    // ── Contact form ──
     const form = document.getElementById('contact-form');
     const status = document.getElementById('form-status');
 
@@ -354,14 +807,13 @@
       const button = form.querySelector('button[type="submit"]');
       button.disabled = true;
       button.textContent = 'Sending…';
-
       setTimeout(() => {
         form.reset();
         button.disabled = false;
         button.textContent = 'Send message';
-        status.textContent = 'Message sent — thanks!';
+        status.textContent = '✓ Message sent — thanks!';
         status.className = 'form-status success';
-        setTimeout(() => { status.textContent = ''; status.className = 'form-status'; }, 4000);
+        setTimeout(() => { status.textContent = ''; status.className = 'form-status'; }, 5000);
       }, 800);
     });
   </script>
