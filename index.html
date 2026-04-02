@@ -557,6 +557,60 @@
       border-radius: 99px;
     }
 
+    /* Liveness demo placeholder */
+    .liveness-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+    }
+
+    .liveness-face {
+      width: 100px;
+      height: 120px;
+      border: 2px solid var(--accent);
+      border-radius: 50% 50% 45% 45%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .liveness-scan {
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: livenessSwipe 2s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    @keyframes livenessSwipe {
+      0%   { top: 0;    opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    .liveness-dot {
+      position: absolute;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: dotPulse 2s ease-in-out infinite;
+    }
+
+    .liveness-dot.top-left  { top: 20%;  left: 15%; animation-delay: 0s; }
+    .liveness-dot.top-right { top: 20%;  right: 15%; animation-delay: 0.3s; }
+    .liveness-dot.bot-left  { bottom: 25%; left: 25%; animation-delay: 0.6s; }
+    .liveness-dot.bot-right { bottom: 25%; right: 25%; animation-delay: 0.9s; }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50%       { opacity: 1;   transform: scale(1.4); }
+    }
+
     /* ── Education ── */
     #education { background: var(--surface); }
 
@@ -757,8 +811,10 @@
           </div>
           <span class="exp-toggle">+ Show highlights</span>
           <ul class="exp-bullets">
-            <li>Led bottom-funnel platform squad for rental insurance, increasing lead activation by 20%.</li>
-            <li>Contributed to ~$2M quarterly revenue growth via process and platform optimization.</li>
+            <li>Led bottom-funnel platform squad for rental insurance.</li>
+            <li>Increased lead activation efficiency by 20% through qualification initiatives.</li>
+            <li>Contributed to ~$2M quarterly revenue growth via process optimization.</li>
+            <li>Implemented facial biometrics to prevent fraud, enabling potential $4M in annual savings.</li>
           </ul>
         </div>
 
@@ -903,48 +959,33 @@
 
         <!-- Project 3 -->
         <div class="portfolio-card reveal reveal-delay-3">
-          <img class="portfolio-img" src="project3.jpg" alt="Rental Insurance Platform"
+          <img class="portfolio-img" src="project3.jpg" alt="Liveness Detection"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-          <div class="portfolio-img-placeholder" style="display:none">
-            📷 Add project3.jpg to your folder
+          <div class="portfolio-img-placeholder" id="p3-placeholder" style="display:none">
+            <div class="liveness-demo">
+              <div class="liveness-face">
+                <div class="liveness-scan"></div>
+                <div class="liveness-dot top-left"></div>
+                <div class="liveness-dot top-right"></div>
+                <div class="liveness-dot bot-left"></div>
+                <div class="liveness-dot bot-right"></div>
+              </div>
+              <span style="font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:1px;">LIVENESS CHECK</span>
+            </div>
           </div>
           <div class="portfolio-body">
             <div class="portfolio-meta">
               <span class="portfolio-company">Loft</span>
               <span class="portfolio-year">· 2022–2024</span>
             </div>
-            <h3 class="portfolio-title">Rental Insurance Platform</h3>
+            <h3 class="portfolio-title">Anti-Fraud: Liveness Detection</h3>
             <p class="portfolio-desc">
-              Led the bottom-funnel squad for Loft's rental insurance product. Redesigned the qualification and activation flow, significantly improving conversion rates and contributing directly to quarterly revenue growth through process and platform optimisation.
+              Drove the implementation of facial biometrics technology to detect and prevent identity fraud across Loft's rental platform. Coordinated cross-functional teams spanning product, engineering, legal, and compliance to deliver a solution that blocked fraudulent applications at scale — protecting the business and its customers.
             </p>
             <div class="portfolio-impact">
-              <span class="impact-badge">↑ 20% lead activation</span>
-              <span class="impact-badge">💰 ~$2M quarterly revenue</span>
-              <span class="impact-badge">🔄 Funnel redesign</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Project 4 -->
-        <div class="portfolio-card reveal reveal-delay-4">
-          <img class="portfolio-img" src="project4.jpg" alt="CRM & Back-office MVP"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-          <div class="portfolio-img-placeholder" style="display:none">
-            📷 Add project4.jpg to your folder
-          </div>
-          <div class="portfolio-body">
-            <div class="portfolio-meta">
-              <span class="portfolio-company">Loft</span>
-              <span class="portfolio-year">· 2021–2022</span>
-            </div>
-            <h3 class="portfolio-title">CRM & Back-office MVP</h3>
-            <p class="portfolio-desc">
-              Designed and launched an MVP to centralise back-office requests from sales teams, replacing fragmented manual workflows. Also launched a new customer relationship journey and a VoC data pipeline that fed directly into product prioritisation.
-            </p>
-            <div class="portfolio-impact">
-              <span class="impact-badge">↑ 80% team efficiency</span>
-              <span class="impact-badge">📣 VoC pipeline</span>
-              <span class="impact-badge">🏗️ 0→1 MVP</span>
+              <span class="impact-badge">💰 $4M+ annual savings</span>
+              <span class="impact-badge">🛡️ Fraud prevention</span>
+              <span class="impact-badge">🤖 Facial biometrics</span>
             </div>
           </div>
         </div>
