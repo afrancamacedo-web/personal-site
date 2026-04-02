@@ -425,6 +425,125 @@
       transform: translateY(-2px);
     }
 
+    /* ── Portfolio ── */
+    #portfolio { background: var(--bg); }
+
+    .portfolio-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .portfolio-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(15,76,129,0.10);
+      border-color: var(--accent);
+    }
+
+    .portfolio-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, var(--border) 0%, var(--bg) 100%);
+    }
+
+    .portfolio-img-placeholder {
+      width: 100%;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--muted);
+      background: linear-gradient(135deg, var(--border), var(--bg));
+      letter-spacing: 0.5px;
+      gap: 8px;
+    }
+
+    /* Mobile video container — portrait 9:16 */
+    .portfolio-video-wrap {
+      width: 100%;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      max-height: 480px;
+    }
+
+    .portfolio-video {
+      width: auto;
+      height: 480px;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .portfolio-body { padding: 28px; }
+
+    .portfolio-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .portfolio-company {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .portfolio-year {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .portfolio-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      margin-bottom: 10px;
+    }
+
+    .portfolio-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .portfolio-impact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .impact-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--accent-bg);
+      border: 1px solid rgba(15,76,129,0.15);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 99px;
+    }
+
     /* ── Education ── */
     #education { background: var(--surface); }
 
@@ -531,6 +650,7 @@
       <li><a href="#hero">Home</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#skills">Skills</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -699,6 +819,118 @@
         <div class="skill-card reveal reveal-delay-4">Looker</div>
         <div class="skill-card reveal reveal-delay-5">Miro</div>
         <div class="skill-card reveal reveal-delay-1">AI / GenAI</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="section" id="portfolio">
+    <div class="section-inner">
+      <p class="label reveal">Work</p>
+      <h2 class="section-title reveal">Portfolio</h2>
+      <div class="portfolio-grid">
+
+        <!-- Project 1 -->
+        <div class="portfolio-card reveal reveal-delay-1">
+          <div class="portfolio-video-wrap">
+            <video class="portfolio-video" autoplay muted loop playsinline
+                   onerror="this.parentElement.style.display='none';document.getElementById('p1-placeholder').style.display='flex'">
+              <source src="project1.mov" type="video/quicktime" />
+              <source src="project1.mov" type="video/mp4" />
+            </video>
+          </div>
+          <div class="portfolio-img-placeholder" id="p1-placeholder" style="display:none">
+            🎬 Add project1.mov to your folder
+          </div>
+          <div class="portfolio-body">
+            <div class="portfolio-meta">
+              <span class="portfolio-company">iConnections</span>
+              <span class="portfolio-year">· 2024–Present</span>
+            </div>
+            <h3 class="portfolio-title">LP Engagement Platform</h3>
+            <p class="portfolio-desc">
+              Led the end-to-end launch of a new LP engagement tool on a global investment platform connecting LPs and GPs. Defined the product vision, coordinated cross-functional squads, and drove adoption from zero to daily active usage — unlocking a brand new revenue stream for the business.
+            </p>
+            <div class="portfolio-impact">
+              <span class="impact-badge">↑ 50%+ DAU growth</span>
+              <span class="impact-badge">💰 New revenue stream</span>
+              <span class="impact-badge">🚀 0→1 launch</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="portfolio-card reveal reveal-delay-2">
+          <img class="portfolio-img" src="project2.jpg" alt="Analytics MVP"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="portfolio-img-placeholder" style="display:none">
+            📷 Add project2.jpg to your folder
+          </div>
+          <div class="portfolio-body">
+            <div class="portfolio-meta">
+              <span class="portfolio-company">iConnections</span>
+              <span class="portfolio-year">· 2024–Present</span>
+            </div>
+            <h3 class="portfolio-title">Analytics MVP</h3>
+            <p class="portfolio-desc">
+              Spearheaded the launch of an analytics MVP that transformed market validation into a revenue-enablement strategy. Worked closely with C-level leadership to align the product with commercial goals and position it as a growth lever for high-value enterprise clients.
+            </p>
+            <div class="portfolio-impact">
+              <span class="impact-badge">📊 Revenue-enablement</span>
+              <span class="impact-badge">🤝 C-level alignment</span>
+              <span class="impact-badge">⚡ MVP in one quarter</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="portfolio-card reveal reveal-delay-3">
+          <img class="portfolio-img" src="project3.jpg" alt="Rental Insurance Platform"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="portfolio-img-placeholder" style="display:none">
+            📷 Add project3.jpg to your folder
+          </div>
+          <div class="portfolio-body">
+            <div class="portfolio-meta">
+              <span class="portfolio-company">Loft</span>
+              <span class="portfolio-year">· 2022–2024</span>
+            </div>
+            <h3 class="portfolio-title">Rental Insurance Platform</h3>
+            <p class="portfolio-desc">
+              Led the bottom-funnel squad for Loft's rental insurance product. Redesigned the qualification and activation flow, significantly improving conversion rates and contributing directly to quarterly revenue growth through process and platform optimisation.
+            </p>
+            <div class="portfolio-impact">
+              <span class="impact-badge">↑ 20% lead activation</span>
+              <span class="impact-badge">💰 ~$2M quarterly revenue</span>
+              <span class="impact-badge">🔄 Funnel redesign</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="portfolio-card reveal reveal-delay-4">
+          <img class="portfolio-img" src="project4.jpg" alt="CRM & Back-office MVP"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+          <div class="portfolio-img-placeholder" style="display:none">
+            📷 Add project4.jpg to your folder
+          </div>
+          <div class="portfolio-body">
+            <div class="portfolio-meta">
+              <span class="portfolio-company">Loft</span>
+              <span class="portfolio-year">· 2021–2022</span>
+            </div>
+            <h3 class="portfolio-title">CRM & Back-office MVP</h3>
+            <p class="portfolio-desc">
+              Designed and launched an MVP to centralise back-office requests from sales teams, replacing fragmented manual workflows. Also launched a new customer relationship journey and a VoC data pipeline that fed directly into product prioritisation.
+            </p>
+            <div class="portfolio-impact">
+              <span class="impact-badge">↑ 80% team efficiency</span>
+              <span class="impact-badge">📣 VoC pipeline</span>
+              <span class="impact-badge">🏗️ 0→1 MVP</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
