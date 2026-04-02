@@ -192,80 +192,14 @@
       50%      { transform: translate(-60px, 40px) scale(1.15); }
     }
 
-    /* ── Fog layers ── */
-    .fog-wrap {
+    /* ── Fog canvas ── */
+    #fog-canvas {
       position: absolute;
       inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .fog-layer {
-      position: absolute;
-      width: 250%;
+      width: 100%;
       height: 100%;
-      background-repeat: repeat-x;
-      background-size: 50% 100%;
-      opacity: 0;
-      animation: fogReveal 2s ease forwards, fogDrift linear infinite;
-    }
-
-    .fog-layer-1 {
-      background-image: radial-gradient(ellipse 60% 40% at 25% 50%, rgba(164,120,100,0.2) 0%, transparent 70%),
-                        radial-gradient(ellipse 50% 35% at 75% 50%, rgba(196,160,144,0.16) 0%, transparent 70%);
-      animation-duration: 2s, 28s;
-      animation-delay: 0s, 0s;
-      top: 0;
-    }
-
-    .fog-layer-2 {
-      background-image: radial-gradient(ellipse 55% 45% at 30% 60%, rgba(122,80,66,0.12) 0%, transparent 70%),
-                        radial-gradient(ellipse 45% 40% at 70% 40%, rgba(164,120,100,0.15) 0%, transparent 70%);
-      animation-duration: 2.5s, 38s;
-      animation-delay: 0.3s, 0s;
-      top: 10%;
-    }
-
-    .fog-layer-3 {
-      background-image: radial-gradient(ellipse 70% 30% at 20% 70%, rgba(212,180,165,0.18) 0%, transparent 70%),
-                        radial-gradient(ellipse 60% 30% at 80% 30%, rgba(164,120,100,0.12) 0%, transparent 70%);
-      animation-duration: 3s, 50s;
-      animation-delay: 0.6s, 0s;
-      top: 30%;
-    }
-
-    .fog-layer-4 {
-      background-image: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(196,160,144,0.1) 0%, transparent 70%);
-      animation-duration: 2s, 22s;
-      animation-delay: 0.2s, 14s;
-      top: -20%;
-    }
-
-    @keyframes fogReveal {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    @keyframes fogDrift {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-
-    [data-theme="dark"] .fog-layer-1 {
-      background-image: radial-gradient(ellipse 60% 40% at 25% 50%, rgba(164,120,100,0.18) 0%, transparent 70%),
-                        radial-gradient(ellipse 50% 35% at 75% 50%, rgba(122,80,66,0.14) 0%, transparent 70%);
-    }
-    [data-theme="dark"] .fog-layer-2 {
-      background-image: radial-gradient(ellipse 55% 45% at 30% 60%, rgba(196,160,144,0.1) 0%, transparent 70%),
-                        radial-gradient(ellipse 45% 40% at 70% 40%, rgba(164,120,100,0.12) 0%, transparent 70%);
-    }
-    [data-theme="dark"] .fog-layer-3 {
-      background-image: radial-gradient(ellipse 70% 30% at 20% 70%, rgba(122,80,66,0.1) 0%, transparent 70%),
-                        radial-gradient(ellipse 60% 30% at 80% 30%, rgba(164,120,100,0.08) 0%, transparent 70%);
-    }
-    [data-theme="dark"] .fog-layer-4 {
-      background-image: radial-gradient(ellipse 50% 50% at 50% 50%, rgba(164,120,100,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hero-inner {
@@ -611,12 +545,7 @@
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
-    <div class="fog-wrap">
-      <div class="fog-layer fog-layer-1"></div>
-      <div class="fog-layer fog-layer-2"></div>
-      <div class="fog-layer fog-layer-3"></div>
-      <div class="fog-layer fog-layer-4"></div>
-    </div>
+    <canvas id="fog-canvas"></canvas>
     <div class="section-inner hero-inner">
       <div class="avatar reveal">
         <img src="avatar.jpg" alt="Alana França" onerror="this.style.display='none';this.parentNode.innerText='AF'" />
@@ -829,6 +758,95 @@
   </footer>
 
   <script>
+    // ── Aurora canvas ──
+    (function () {
+      const canvas = document.getElementById('fog-canvas');
+      const ctx = canvas.getContext('2d');
+      let dpr = window.devicePixelRatio || 1;
+
+      // Aurora ribbons — mocha mousse shades only
+      const ribbons = [
+        { y:0.30, amp:0.05, freq:0.0045, speed:0.00016, h:0.35, r:164, g:120, b:100, a:0.11 }, // Mocha Mousse
+        { y:0.50, amp:0.07, freq:0.0030, speed:0.00011, h:0.40, r:196, g:158, b:140, a:0.09 }, // Light mocha
+        { y:0.20, amp:0.04, freq:0.0060, speed:0.00020, h:0.30, r:122, g:82,  b:64,  a:0.08 }, // Deep mocha
+        { y:0.65, amp:0.06, freq:0.0050, speed:0.00014, h:0.38, r:212, g:178, b:162, a:0.08 }, // Pale mocha
+        { y:0.42, amp:0.04, freq:0.0080, speed:0.00025, h:0.28, r:140, g:98,  b:78,  a:0.07 }, // Mid mocha
+        { y:0.75, amp:0.05, freq:0.0035, speed:0.00012, h:0.32, r:180, g:138, b:118, a:0.07 }, // Warm mocha
+        { y:0.12, amp:0.03, freq:0.0055, speed:0.00018, h:0.25, r:100, g:64,  b:48,  a:0.06 }, // Dark mocha
+      ];
+
+      function resize() {
+        const hero = document.getElementById('hero');
+        dpr = window.devicePixelRatio || 1;
+        canvas.width  = hero.offsetWidth  * dpr;
+        canvas.height = hero.offsetHeight * dpr;
+        canvas.style.width  = hero.offsetWidth  + 'px';
+        canvas.style.height = hero.offsetHeight + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function drawRibbon(rib, W, H, t) {
+        const steps = Math.ceil(W / 3) + 2;
+        const halfH  = rib.h * H * 0.5;
+
+        // Top edge points
+        const topY = [], botY = [];
+        for (let i = 0; i <= steps; i++) {
+          const x = (i / steps) * W;
+          const wave =
+            Math.sin(x * rib.freq + t * rib.speed)        * rib.amp * H +
+            Math.sin(x * rib.freq * 1.9 + t * rib.speed * 1.4) * rib.amp * H * 0.35 +
+            Math.sin(x * rib.freq * 3.1 + t * rib.speed * 0.7) * rib.amp * H * 0.15;
+          const cy = rib.y * H + wave;
+          topY.push(cy - halfH);
+          botY.push(cy + halfH);
+        }
+
+        // Draw filled ribbon shape
+        ctx.beginPath();
+        for (let i = 0; i <= steps; i++) {
+          const x = (i / steps) * W;
+          i === 0 ? ctx.moveTo(x, topY[i]) : ctx.lineTo(x, topY[i]);
+        }
+        for (let i = steps; i >= 0; i--) {
+          ctx.lineTo((i / steps) * W, botY[i]);
+        }
+        ctx.closePath();
+
+        // Vertical gradient — very soft feathered fog
+        const midY  = rib.y * H;
+        const grad  = ctx.createLinearGradient(0, midY - halfH, 0, midY + halfH);
+        const rc    = `${rib.r},${rib.g},${rib.b}`;
+        grad.addColorStop(0,    `rgba(${rc},0)`);
+        grad.addColorStop(0.15, `rgba(${rc},${rib.a * 0.3})`);
+        grad.addColorStop(0.35, `rgba(${rc},${rib.a * 0.8})`);
+        grad.addColorStop(0.5,  `rgba(${rc},${rib.a})`);
+        grad.addColorStop(0.65, `rgba(${rc},${rib.a * 0.8})`);
+        grad.addColorStop(0.85, `rgba(${rc},${rib.a * 0.3})`);
+        grad.addColorStop(1,    `rgba(${rc},0)`);
+
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      function draw(ts) {
+        const W = canvas.width  / dpr;
+        const H = canvas.height / dpr;
+        ctx.clearRect(0, 0, W, H);
+        ribbons.forEach(r => drawRibbon(r, W, H, ts));
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+
+      canvas.style.opacity = '0';
+      canvas.style.transition = 'opacity 2.5s ease';
+      setTimeout(() => { canvas.style.opacity = '1'; }, 400);
+
+      requestAnimationFrame(draw);
+    })();
+
     // ── Theme toggle ──
     const html = document.documentElement;
     const toggleBtn = document.getElementById('theme-toggle');
